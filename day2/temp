@@ -1,0 +1,46 @@
+func _day2(filePath string) {
+    var gamesMetaData []string = getInputFromFile(filePath)
+
+    for _, game := range gamesMetaData {
+        var chunks []string = strings.Split(game, ":")
+        var setStrings []string = strings.Split(chunks[1], ";")
+
+        var cubeSets []CubeSet
+        for _, setString := range setStrings {
+            cubeSets = append(cubeSets, getCubeSet(setString).Split(setString, ","))
+        }
+    }
+}
+
+func getCubeSet(setString []string) CubeSet {
+    m := make(map[string]int)
+    for _, setColor := range setString {
+        var amount, color = splitCubeParams(set) 
+    }
+    var cube CubeSet = new(CubeSet)
+    cube.red = m["red"]
+    cube.blue = m["blue"]
+    cube.green = m["green"]
+
+    return cube
+}
+
+func splitCubeParams(s []string) (string, string) {
+    splited := strings.Split(s, " ")
+    return splited[0], splited[1]
+}
+
+func getInputFromFile(filePath string) []string {
+    file, err := os.Open(filePath)
+    check(err)
+    
+    fileScanner := bufio.NewScanner(file)
+    fileScanner.Split(bufio.ScanLines)
+
+    var inputSlice []string
+    for fileScanner.Scan() {
+        inputSlice = append(inputSlice, fileScanner.Text())
+    } 
+    file.Close()
+    return inputSlice
+}

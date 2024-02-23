@@ -11,7 +11,7 @@ func main() {
     
     day1("./input-1.txt")
 }
-
+asdfj;alkfdjadlfkj f sa;ldk fasklfj
 func day1(inputPath string) int {
     // Get Calibration Document from File
     var input1 []string = getInputFromFile(inputPath)
