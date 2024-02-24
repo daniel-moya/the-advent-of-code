@@ -23,6 +23,10 @@ func (cubeSet *CubeSet) setProperty(propName string, propValue float64) *CubeSet
     return cubeSet
 }
 
+func (cubeSet *CubeSet) getPower() float64 {
+    return cubeSet.Red * cubeSet.Green * cubeSet.Blue
+}
+
 func main (){
     day2()
 }
@@ -32,6 +36,7 @@ func day2() {
     
     var games []string = getInputFromFile("input-2.txt")
     var total int64
+    var totalOfSetsPower float64
 
     for _, gameStr := range games {
 	var gameSlice []string = strings.Split(gameStr, ":")
@@ -40,33 +45,42 @@ func day2() {
 	    10,
 	    64,
 	)
-	total += processGame(gameId, strings.Trim(gameSlice[1], " "), capacitySet)
+	id, minCubeSetPower := processGame(gameId, strings.Trim(gameSlice[1], " "), capacitySet)
+
+	total += id
+	totalOfSetsPower += minCubeSetPower
     }
-    fmt.Printf("Total is %d \n", total)
+    fmt.Printf("Total is %v \n", total)
+    fmt.Printf("Sum of min capacity powers is %v \n", totalOfSetsPower)
+
 }
 
 // Returns the game id for games that meet the required game capacity
-func processGame(id int64, cubesStr string, capacity CubeSet) int64 {
+func processGame(id int64, cubesStr string, capacity CubeSet) (int64, float64) {
     var isGamePossible bool = true
     var minSet CubeSet 
+    var minCapacitySet CubeSet
 
-    for _, subSet := range strings.Split(cubesStr, ";") {
-	if id == 1 {
-	    fmt.Println(minSet, subSet)
-	    fmt.Printf("%v \n", MergeMaxSet(minSet, getSet(strings.Trim(subSet, " "))))
-	}
-        minSet = MergeMaxSet(minSet, getSet(strings.Trim(subSet, " ")))    
+    for index, subSet := range strings.Split(cubesStr, ";") {
+	currentSet := getSet(strings.Trim(subSet, " "))
+        minSet = MergeMaxSet(minSet, currentSet)    
+
         if SetCompare(capacity, minSet) < 0 {
             isGamePossible = false
-            break
         }
+
+	if index > 0 {
+	    minCapacitySet = MergeMaxSetWithoutZero(minCapacitySet, currentSet)
+	} else {
+	    minCapacitySet = currentSet
+	}
     }
 
     if isGamePossible {
-	return id
+	return id, minCapacitySet.getPower()
     }
 
-    return 0
+    return 0, minCapacitySet.getPower()
 }
 
 var caser = cases.Title(language.English)
@@ -98,6 +112,27 @@ func MergeMaxSet(a CubeSet, b CubeSet) CubeSet {
     merged.Blue =  math.Max(a.Blue, b.Blue)
     return merged
 }
+
+// Merges 2 sets with the min values from each Except 0
+// Returns the MinCubeSet
+func MergeMaxSetWithoutZero(a CubeSet, b CubeSet) CubeSet {
+    merged := CubeSet{}
+    merged.Red = maxWithoutZero(a.Red, b.Red) 
+    merged.Green = maxWithoutZero(a.Green, b.Green) 
+    merged.Blue = maxWithoutZero(a.Blue, b.Blue) 
+
+    return merged
+}
+
+func maxWithoutZero (a float64, b float64) float64 {
+    if a != 0 && b != 0 {
+	return math.Max(a, b)
+    } else if a == 0 {
+	return b
+    }
+    return a
+}
+
 
 // Compare 2 CubeSet struct types 
 // Returns a positive number if any value of A is greater than B
