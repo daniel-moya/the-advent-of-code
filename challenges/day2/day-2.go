@@ -28,6 +28,7 @@ func (cubeSet *CubeSet) getPower() float64 {
 }
 
 func Run(){
+    fmt.Println("\n Challenge #2")
     day2()
 }
 

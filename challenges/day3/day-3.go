@@ -13,6 +13,7 @@ type Range struct {
 }
 
 func Run() {
+    fmt.Println("\n Challenge #3")   
     day3()
 }
 

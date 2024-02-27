@@ -9,6 +9,7 @@ import (
 )
 
 func Run() {
+    fmt.Println("\n Challenge #1")
     day1("./challenges/day1/input-1.txt")
 }
 
@@ -18,7 +19,6 @@ func day1(inputPath string) int {
     var total int
     for _, line := range input1 {
         // Add calibration number per line    
-        fmt.Println(line + ": ")
         total += getCalibrationValue(line) 
     }
 
@@ -30,24 +30,18 @@ func getCalibrationValue(line string) int {
     var digit string
     counter := 0
     for index, char := range line  {
-        fmt.Println("LEFT: ", string(char))
         if _, errA := strconv.Atoi(string(char)); errA == nil {
-            fmt.Println("found Ai ",string(char) )
             digit = string(digit) + string(char)
             counter = index 
             break
         } 
     }
-fmt.Println("counter", counter)
     for reverseIndex := utf8.RuneCountInString(line) - 1; reverseIndex >= counter; reverseIndex-- {
-        fmt.Println("RIGHT: ", string(line[reverseIndex]))
         if _, errB := strconv.Atoi(string(line[reverseIndex])); errB == nil {
-            fmt.Println("FOUND B: ", string(line[reverseIndex]))
             digit = string(digit) + string(line[reverseIndex])
             break
         } 
     }
-    fmt.Println("found: ", digit)
     intDigit, _ := strconv.Atoi(digit) 
     return intDigit
 }
