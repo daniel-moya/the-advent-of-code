@@ -1,4 +1,4 @@
-package main
+package day2 
 
 import (
     "bufio"
@@ -27,14 +27,14 @@ func (cubeSet *CubeSet) getPower() float64 {
     return cubeSet.Red * cubeSet.Green * cubeSet.Blue
 }
 
-func main (){
+func Run(){
     day2()
 }
 
 func day2() {
     var capacitySet = CubeSet{Red:12, Green: 13, Blue: 14}
     
-    var games []string = getInputFromFile("input-2.txt")
+    var games []string = getInputFromFile("./challenges/day2/input-2.txt")
     var total int64
     var totalOfSetsPower float64
 

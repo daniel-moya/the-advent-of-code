@@ -1,4 +1,4 @@
-package main
+package day1
 
 import (
     "strconv"
@@ -7,9 +7,9 @@ import (
     "fmt"
     "os"
 )
-func main() {
-    
-    day1("./input-1.txt")
+
+func Run() {
+    day1("./challenges/day1/input-1.txt")
 }
 
 func day1(inputPath string) int {
