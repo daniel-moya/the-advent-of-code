@@ -2,18 +2,12 @@ package day1
 
 import (
 	"bufio"
-	"fmt"
 	"os"
 	"strconv"
 	"unicode/utf8"
 )
 
-func Run() {
-	fmt.Println("\n Challenge #1")
-	day1("./challenges/day1/input-1.txt")
-}
-
-func day1(inputPath string) int {
+func Run(inputPath string) int {
 	// Get Calibration Document from File
 	var input1 []string = getInputFromFile(inputPath)
 	var total int
@@ -22,7 +16,6 @@ func day1(inputPath string) int {
 		total += getCalibrationValue(line)
 	}
 
-	fmt.Println("Total Calibration Value is %n", total)
 	return total
 }
 

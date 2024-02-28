@@ -2,7 +2,6 @@ package day2
 
 import (
 	"bufio"
-	"fmt"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 	"math"
@@ -27,15 +26,10 @@ func (cubeSet *CubeSet) getPower() float64 {
 	return cubeSet.Red * cubeSet.Green * cubeSet.Blue
 }
 
-func Run() {
-	fmt.Println("\n Challenge #2")
-	day2()
-}
-
-func day2() {
+func Run(filePath string) (int64, float64) {
 	var capacitySet = CubeSet{Red: 12, Green: 13, Blue: 14}
 
-	var games []string = getInputFromFile("./challenges/day2/input-2.txt")
+	var games []string = getInputFromFile(filePath)
 	var total int64
 	var totalOfSetsPower float64
 
@@ -51,9 +45,7 @@ func day2() {
 		total += id
 		totalOfSetsPower += minCubeSetPower
 	}
-	fmt.Printf("Total is %v \n", total)
-	fmt.Printf("Sum of min capacity powers is %v \n", totalOfSetsPower)
-
+	return total, totalOfSetsPower
 }
 
 // Returns the game id for games that meet the required game capacity
