@@ -1,4 +1,4 @@
-package day3  
+package day3
 
 import (
 	"bufio"
@@ -7,62 +7,72 @@ import (
 	"strconv"
 )
 
-type Range struct {
-    Start int
-    End int
+type PartNumberBit struct {
+	index         int
+	isLeftCorner  bool
+	isMiddle      bool
+	isRightCorner bool
 }
 
-func Run() {
-    fmt.Println("\n Challenge #3")   
-    day3()
-}
+func Run(path string) int {
+	var schemaLines []string = getInputFromFile(path)
+	for _, line := range schemaLines {
+		var chunks [][]PartNumberBit
+		var currChunk []PartNumberBit
+		var pushed bool
+		for index, char := range line {
+			_, err := strconv.ParseInt(string(char), 10, 64)
+			if pushed {
+				currChunk = []PartNumberBit{}
+			}
 
-func day3() {
-    var schemaLines []string = getInputFromFile("./challenges/day3/input-3-test.txt")
-    for _, line := range schemaLines {
-        var digitsSlice = []Range{{-1, -1}}
-        for col, char := range line {
-            sliceIndex := 0
-            currentSlice := &digitsSlice[sliceIndex]
-            _, err := strconv.ParseInt(string(char), 10, 32) 
-            if err == nil {
-                fmt.Println(currentSlice.Start)
-                if currentSlice.Start == -1 {
-                    fmt.Printf("set start %v \n", col)
-                    currentSlice.Start = col 
-                } 
-            } else if currentSlice.Start > -1 && currentSlice.End == -1 {
-                fmt.Printf("set end %v \n", col-1)
-                currentSlice.End = col - 1    
-                digitsSlice = append(digitsSlice, Range{-1, -1})
-                sliceIndex += 1
-            }
-               
-        } 
-        fmt.Printf("slices %v \n", digitsSlice)
-    }
+			currPartNumberBit := PartNumberBit{index: index}
+			if err == nil {
+				if len(currChunk) == 0 {
+					currPartNumberBit.isLeftCorner = true
+				} else {
+					currPartNumberBit.isMiddle = true
+				}
+				currChunk = append(currChunk, currPartNumberBit)
+				pushed = false
+			} else {
+				if !pushed && len(currChunk) > 0 {
+					currChunk[len(currChunk)-1].isRightCorner = true
+					currChunk[len(currChunk)-1].isMiddle = false
+					if len(currChunk) == 0 {
+						currChunk[0].isMiddle = true
+						currChunk[0].isRightCorner = true
+					}
+
+					chunks = append(chunks, currChunk)
+					pushed = true
+					// TODO: scan chunk after pushed
+				}
+			}
+		}
+		fmt.Println(chunks)
+	}
+	return 0
 }
 
 // Util to parse file into string input
 func getInputFromFile(filePath string) []string {
-    file, err := os.Open(filePath)
-    check(err)
-    
-    fileScanner := bufio.NewScanner(file)
-    fileScanner.Split(bufio.ScanLines)
+	file, err := os.Open(filePath)
+	check(err)
 
-    var inputSlice []string
-    for fileScanner.Scan() {
-        inputSlice = append(inputSlice, fileScanner.Text())
-    } 
-    file.Close()
-    return inputSlice
+	fileScanner := bufio.NewScanner(file)
+	fileScanner.Split(bufio.ScanLines)
+
+	var inputSlice []string
+	for fileScanner.Scan() {
+		inputSlice = append(inputSlice, fileScanner.Text())
+	}
+	file.Close()
+	return inputSlice
 }
 
-
-
 func check(err error) {
-    if err != nil {
-        panic(err)
-    }
+	if err != nil {
+		panic(err)
+	}
 }
