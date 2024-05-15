@@ -1,11 +1,10 @@
 package day2
 
 import (
-	"bufio"
+	"github.com/daniel-moya/aoc/challenges/utils"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 	"math"
-	"os"
 	"reflect"
 	"strconv"
 	"strings"
@@ -29,7 +28,7 @@ func (cubeSet *CubeSet) getPower() float64 {
 func Run(filePath string) (int64, float64) {
 	var capacitySet = CubeSet{Red: 12, Green: 13, Blue: 14}
 
-	var games []string = getInputFromFile(filePath)
+	var games []string = utils.GetInputFromFile(filePath)
 	var total int64
 	var totalOfSetsPower float64
 
@@ -134,26 +133,4 @@ func SetCompare(a CubeSet, b CubeSet) int {
 		return 1
 	}
 	return -1
-}
-
-// Util to parse file into string input
-func getInputFromFile(filePath string) []string {
-	file, err := os.Open(filePath)
-	check(err)
-
-	fileScanner := bufio.NewScanner(file)
-	fileScanner.Split(bufio.ScanLines)
-
-	var inputSlice []string
-	for fileScanner.Scan() {
-		inputSlice = append(inputSlice, fileScanner.Text())
-	}
-	file.Close()
-	return inputSlice
-}
-
-func check(err error) {
-	if err != nil {
-		panic(err)
-	}
 }

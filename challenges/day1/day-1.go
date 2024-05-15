@@ -1,15 +1,14 @@
 package day1
 
 import (
-	"bufio"
-	"os"
+	"github.com/daniel-moya/aoc/challenges/utils"
 	"strconv"
 	"unicode/utf8"
 )
 
 func Run(inputPath string) int {
 	// Get Calibration Document from File
-	var input1 []string = getInputFromFile(inputPath)
+	var input1 []string = utils.GetInputFromFile(inputPath)
 	var total int
 	for _, line := range input1 {
 		// Add calibration number per line
@@ -37,25 +36,4 @@ func getCalibrationValue(line string) int {
 	}
 	intDigit, _ := strconv.Atoi(digit)
 	return intDigit
-}
-
-func getInputFromFile(filePath string) []string {
-	file, err := os.Open(filePath)
-	check(err)
-
-	fileScanner := bufio.NewScanner(file)
-	fileScanner.Split(bufio.ScanLines)
-
-	var inputSlice []string
-	for fileScanner.Scan() {
-		inputSlice = append(inputSlice, fileScanner.Text())
-	}
-	file.Close()
-	return inputSlice
-}
-
-func check(e error) {
-	if e != nil {
-		panic(e)
-	}
 }
