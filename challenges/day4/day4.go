@@ -8,8 +8,14 @@ import (
 func Run(path string) int {
 	slice := utils.GetInputFromFile(path)
 	total := 0
-	for _, line := range slice {
-		points := 0
+	var cardsMap map[int]int = make(map[int]int)
+
+	for cardNumber := range slice {
+		cardsMap[cardNumber] = 1
+	}
+
+	for row, line := range slice {
+		matches := 0
 		card := strings.Split(line, ":")
 		numbers := strings.Split(card[1], "|")
 		winners := strings.Fields(strings.TrimSpace(numbers[0]))
@@ -18,16 +24,21 @@ func Run(path string) int {
 		for _, current := range assigned {
 			for _, winner := range winners {
 				if current == winner {
-					if points == 0 {
-						points = 1
-					} else {
-						points *= 2
-					}
+					matches++
 					break
 				}
 			}
 		}
-		total += points
+
+		if matches > 0 {
+			for index := row + 1; index <= row+matches; index++ {
+				cardsMap[index] = cardsMap[index] + cardsMap[row]
+			}
+		}
+
+	}
+	for row := range slice {
+		total += cardsMap[row]
 	}
 
 	return total
