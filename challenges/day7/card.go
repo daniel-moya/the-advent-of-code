@@ -31,15 +31,11 @@ func CompareCards(a, b Card) int {
 	return a.Value - b.Value
 }
 
-func (c *Card) Marshall(char string) error {
+func MarshallCard(char string, c *Card) error {
 	val := 0
 
 	switch char {
-	case "A":
-	case "K":
-	case "Q":
-	case "J":
-	case "T":
+	case "A", "K", "Q", "J", "T":
 		val = getValueFromLetter(char)
 	default:
 		num, err := strconv.Atoi(char)
@@ -65,6 +61,10 @@ func getValueFromLetter(letter string) int {
 		return Q
 	case "J":
 		return J
+	case "T":
+		return T
+
 	}
+
 	return 0
 }

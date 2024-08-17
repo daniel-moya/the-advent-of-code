@@ -13,7 +13,7 @@ func Part1(path string) int {
 	hands := []Hand{}
 	for _, line := range lines {
 		hand := NewHand()
-		hand.Marshall(line)
+		MarshallHand(line, hand)
 		hands = append(hands, *hand)
 	}
 

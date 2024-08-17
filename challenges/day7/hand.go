@@ -17,23 +17,27 @@ const (
 )
 
 type Hand struct {
-	Index map[int]Card
-	Value int
-	Bid   int
+	Index     map[int]Card
+	Value     int
+	Bid       int
+	Raw       string
+	kinds     []string
+	kindCount map[string]int
 }
 
 func NewHand() *Hand {
 	return &Hand{Index: make(map[int]Card), Value: 0}
 }
 
-func (h *Hand) Marshall(line string) error {
+func MarshallHand(line string, h *Hand) error {
 	parsedLine := strings.Split(strings.ReplaceAll(line, " ", "-"), "-")
 	kinds := []string{}
 	handIndex := make(map[string]int)
 
+	h.Raw = parsedLine[0]
 	for index, char := range parsedLine[0] {
 		card := &Card{}
-		err := card.Marshall(string(char))
+		err := MarshallCard(string(char), card)
 		if err != nil {
 			return fmt.Errorf("Error parsing hand value, %v \n", err)
 		}
@@ -46,6 +50,8 @@ func (h *Hand) Marshall(line string) error {
 	}
 
 	h.Value = calculateHandValue(kinds, handIndex)
+	h.kinds = kinds
+	h.kindCount = handIndex
 	bid, err := strconv.Atoi(parsedLine[1])
 	if err != nil {
 		return fmt.Errorf("Errr parsing hand's bid, %v \n", err)
@@ -55,13 +61,27 @@ func (h *Hand) Marshall(line string) error {
 	return nil
 }
 
+func CompareHands(a, b Hand) int {
+	if (a.Value - b.Value) != 0 {
+		return a.Value - b.Value
+	}
+	for index := 0; index < 5; index++ {
+		compared := CompareCards(a.Index[index], b.Index[index])
+		if compared != 0 {
+			return compared
+		}
+	}
+
+	// If all 5 cards are equal in the same order
+	return -1
+}
+
 func calculateHandValue(kinds []string, handIndex map[string]int) int {
 
 	fiveKind := false
 	fourKind := false
 	threeKind := false
 	pair := 0
-
 	for _, kind := range kinds {
 		switch handIndex[kind] {
 		case 5:
@@ -75,6 +95,7 @@ func calculateHandValue(kinds []string, handIndex map[string]int) int {
 			break
 		case 2:
 			pair += 1
+			break
 		default:
 		}
 	}
@@ -98,9 +119,10 @@ func calculateHandValue(kinds []string, handIndex map[string]int) int {
 	if pair == 2 {
 		return TWO_PAIR
 	}
+
 	if pair == 1 {
 		return ONE_PAIR
 	}
 
-	return 0
+	return 1
 }

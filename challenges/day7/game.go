@@ -12,26 +12,11 @@ func NewSortedRanking(hands []Hand) *Ranking {
 
 }
 
-func CompareHands(a, b Hand) int {
-	if (a.Value - b.Value) != 0 {
-		return a.Value - b.Value
-	}
-
-	for index := 0; index < 5; index++ {
-		compared := CompareCards(a.Index[index], b.Index[index])
-		if compared != 0 {
-			return compared
-		}
-	}
-
-	// If all 5 cards are equal in the same order
-	return 0
-}
-
 func (r *Ranking) GetBidTotal() int {
 	total := 0
 	for index, hand := range r.Index {
 		total += hand.Bid * (index + 1)
+
 	}
 	return total
 }
@@ -51,7 +36,7 @@ func merge(a []Hand, b []Hand) []Hand {
 	j := 0
 	for i < len(a) && j < len(b) {
 		result := CompareHands(a[i], b[j])
-		if result <= 0 {
+		if result < 0 {
 			final = append(final, a[i])
 			i++
 		} else {
