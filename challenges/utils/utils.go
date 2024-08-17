@@ -23,3 +23,7 @@ func check(e error) {
 		panic(e)
 	}
 }
+
+type Runner interface {
+	Run()
+}

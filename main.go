@@ -1,9 +1,14 @@
 package main
 
-import "github.com/daniel-moya/aoc/challenges/day5"
-import "fmt"
+import (
+	"fmt"
+	"time"
+
+	"github.com/daniel-moya/aoc/challenges/day6"
+)
 
 func main() {
-	total := day5.Run("./challenges/day5/input.txt")
-	fmt.Println(total)
+	start := time.Now()
+	total := day6.Run("./challenges/day6/input.txt")
+	fmt.Printf("Result: %v in %v\n", total, time.Since(start))
 }
