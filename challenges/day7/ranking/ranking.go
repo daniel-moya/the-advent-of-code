@@ -1,11 +1,15 @@
-package day7
+package ranking
+
+import (
+	"github.com/daniel-moya/aoc/challenges/day7/hand"
+)
 
 type Ranking struct {
-	Index []Hand
+	Index []hand.Hand
 	Size  int
 }
 
-func NewSortedRanking(hands []Hand) *Ranking {
+func NewSortedRanking(hands []hand.Hand) *Ranking {
 	sorted := mergeSort(hands)
 
 	return &Ranking{Index: sorted, Size: len(sorted)}
@@ -16,12 +20,11 @@ func (r *Ranking) GetBidTotal() int {
 	total := 0
 	for index, hand := range r.Index {
 		total += hand.Bid * (index + 1)
-
 	}
 	return total
 }
 
-func mergeSort(items []Hand) []Hand {
+func mergeSort(items []hand.Hand) []hand.Hand {
 	if len(items) < 2 {
 		return items
 	}
@@ -30,12 +33,12 @@ func mergeSort(items []Hand) []Hand {
 	return merge(first, second)
 }
 
-func merge(a []Hand, b []Hand) []Hand {
-	final := []Hand{}
+func merge(a []hand.Hand, b []hand.Hand) []hand.Hand {
+	final := []hand.Hand{}
 	i := 0
 	j := 0
 	for i < len(a) && j < len(b) {
-		result := CompareHands(a[i], b[j])
+		result := hand.CompareHands(a[i], b[j])
 		if result < 0 {
 			final = append(final, a[i])
 			i++
