@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/daniel-moya/aoc/challenges/day7"
+	"github.com/daniel-moya/aoc/challenges/day8"
 )
 
 func main() {
 	start := time.Now()
-	total := day7.Run("./challenges/day7/input.txt")
+	total := day8.Run("./challenges/day8/input.txt")
 	fmt.Printf("Result: %v in %v\n", total, time.Since(start))
 }
